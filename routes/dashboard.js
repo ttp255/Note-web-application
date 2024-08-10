@@ -15,11 +15,14 @@ router.route('/dashboard/search')
 
     .post(dashBoardController.searchNote)
 
-router.get('/dashboard/item/:id',dashBoardController.viewNote)
+router.route('/dashboard/item/:id')
+    .get(dashBoardController.viewNote)
+    .post(dashBoardController.updateNote)
 
-router.post('/dashboard/item/:id',dashBoardController.updateNote)
-router.post('/dashboard/item-delete/:id',dashBoardController.deleteNote)
-    
+
+router.route('/dashboard/item-delete/:id')
+        .post(dashBoardController.deleteNote)
+        .get(dashBoardController.deleteNote)
 
 
 module.exports=router

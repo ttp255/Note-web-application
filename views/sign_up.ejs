@@ -10,13 +10,27 @@
 <body>
   <div class="wrapper">
     <form action="" method="post">
+      <div>
+        <% if (locals.flashes){%>
+          <% for(i in locals.flashes){%>
+            <div class="alert alert-danger" role="alert">
+                  <%= locals.flashes[i]%>
+            </div>
+          <% }%>
+        <% }%>
+        
+      </div>
       <h1>Sign Up</h1>
       <div class="input-box">
-        <input type="text" placeholder="Username" name="username" required>
+        <input type="text" placeholder="Username" name="username"  required>
         <i class='bx bxs-user'></i>
       </div>
       <div class="input-box"> 
-        <input type="password" placeholder="Password" name="password" required>
+        <input type="password" placeholder="Password" name="password1"  required>
+        <i class='bx bxs-lock-alt' ></i>
+      </div>
+      <div class="input-box"> 
+        <input type="password" placeholder="CheckPassword" name="password2"  required>
         <i class='bx bxs-lock-alt' ></i>
       </div>
       <div class="input-box"> 
@@ -24,10 +38,11 @@
         
       </div>
     
-      <button type="submit" class="btn">Sign up</button>
+      <button type="submit" class="btn" >Sign up</button>
       <div class="register-link">
         <p>Have an account! <a href="/sign-in">Sign In</a></p>
       </div>
+      
     </form>
   </div>
 </body>

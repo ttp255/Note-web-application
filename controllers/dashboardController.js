@@ -1,8 +1,8 @@
-const mongoose=require('mongoose')
 const Notes=require('../model/Notes')
 
 
 const dashboard=async(req,res)=>{
+    // console.log(req.id)
     let perPage=12
     let page = req.query.page || 1
     const locals={
@@ -12,21 +12,9 @@ const dashboard=async(req,res)=>{
         
     }
     try{
-        const notes = await Notes.aggregate([
-            { $sort: { updatedAt: -1 } },
-            
-          
-            {
-              $project: {
-                title: { $substr: ["$title", 0, 30] },
-                body: { $substr: ["$body", 0, 100] },
-              },
-            }
-            ])
-          .skip(perPage * page - perPage)
-          .limit(perPage)
-          .exec(); 
-          
+     
+        const notes=await Notes.find({user:req.id})
+        notes.reverse()
         const count = await Notes.countDocuments();
          res.render('dashboard/index',{
             userName:req.user,
@@ -48,14 +36,14 @@ const addNotes=async(req,res)=>{
         const {title,body}=req.body
         if(!title||!body)res.sendStatus(400)
         const newNote=await Notes.create({
-            user:req.user._id,
+            user:req.id,
             title,
             body
 
 
         })
         await newNote.save()
-        res.redirect('/dashboard')
+        return res.redirect('/dashboard')
 
 
     }

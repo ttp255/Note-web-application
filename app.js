@@ -5,6 +5,8 @@ const express=require('express')
 const expressLayouts=require('express-ejs-layouts')
 const connectDb=require('./config/db')
 const cookieParser=require('cookie-parser')
+const session=require('cookie-session')
+const flash=require('connect-flash')
 const app=express()
 const port=5000 ||process.env.PORT
 
@@ -13,6 +15,16 @@ const port=5000 ||process.env.PORT
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 app.use(cookieParser())
+app.use(session({
+    name:'session',
+    keys:['d5b6be1f198898d375bb18b387d192d36e74b0b2e7807eb64839c2f2b1bbc1da'],
+    maxAge:24*60*1000*60
+}))
+app.use(flash())
+app.use((req,res,next)=>{
+    res.locals.flashes=req.flash()
+    next()
+})
 //static files
 
 

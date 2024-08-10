@@ -3,21 +3,25 @@ require('dotenv').config()
 
 const verifyJWT=(req,res,next)=>{
     const token=req.cookies.jwt
-    console.log('Ok')
-    console.log(token)
+    
     if(!token){
-        
-       res.redirect('sign-in')
+        return res.redirect('sign-in')
     }
+    // console.log(token)
    
     jwt.verify(
         token,
         process.env.ACCESS_TOKEN_SECRET,
         (err,decoded)=>{
-            if(err)return res.redirect('sign-in')
+            if(err)
+                return res.redirect('sign-in')
+            
             req.user=decoded.username
             req.id=decoded.id
+            
             next()
+            
+            
         }
 
     )

@@ -7,11 +7,14 @@ const handleLogin=async(req,res)=>{
     if (req.method=='POST'){
         const {username,password}=req.body
         // console.log(username,password);
-        if(!username||!password)return res.status(400).send({'message':'User or password are required!'})
-        const foundUser= await User.findOne({username})
-        if(!foundUser)return res.send(401)
-        const match=await bcrypt.compare(password,foundUser.password)
+        const foundUser=await User.findOne({username})
+        if(!foundUser){
+           req.flash('error','User is not existed!')
+           return res.redirect('/sign-in')
+        }
         
+        const match=await bcrypt.compare(password,foundUser.password)
+
     
          if(match){
             const accessToken=jwt.sign({
@@ -30,7 +33,21 @@ const handleLogin=async(req,res)=>{
             return res.redirect('/dashboard')
             
             
-        }   
+        }else{
+            
+           
+
+            // res.render('login',message)
+         
+            req.flash('error','Password is wrong!')
+            
+            return res.redirect('/sign-in')
+                
+            
+        
+            
+            
+        }
         
             
     }
@@ -38,7 +55,7 @@ const handleLogin=async(req,res)=>{
     
 }
 const loginPage=(req,res)=>{
-     res.render('login')
+    res.render('login.ejs')
 }
 
 module.exports={handleLogin,loginPage}

@@ -1,16 +1,21 @@
 const User=require('../model/User')
-const bcrypt=require('bcrypt')
+
 
 const handlUser=async(req,res)=>{
     if(req.method=='POST'){
         const user=req.body
         console.log(user);
-        if(!user.username ||!user.password||!user.email )return res.status(400).send({'message':"Not null!"})
-
         if(await User.findOne({username:user.username})){
-            return res.status(409).send({'message':"Username is already existed!"})
-
+            req.flash('error','User is existed!')
+            return res.redirect('/sign-up')
+           
         }
+        if(user.password1!==user.password2)
+            req.flash('error','Password is not match!')
+            return res.redirect('sign-up')
+
+            
+      
        
         const newUser=await User.create({
             username:user.username,
